@@ -19,7 +19,8 @@ Gem::Specification.new do |s|
   ]
   s.files = [
     ".rspec",
-    ".rvmrc",
+    ".ruby-version",
+    ".ruby-gemset",
     "CHANGELOG.md",
     "Gemfile",
     "Gemfile.lock",
