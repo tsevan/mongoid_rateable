@@ -478,6 +478,22 @@ describe Comment do
 	it { should respond_to :rating_marks }
 	it { should respond_to :user_mark }
 
+  describe '#rateable' do
+    before(:all) do
+      class Foo; end
+    end
+
+    it 'should accept single rater' do
+      Comment.rateable(range: (-5..7), raters: Foo)
+      Comment.rater_classes.should == [Foo]
+    end
+
+    it 'should accept array of raters' do
+      Comment.rateable(range: (-5..7), raters: [User, Foo])
+      Comment.rater_classes.should == [User, Foo]
+    end
+  end
+
 	describe "#rating_marks" do
 		it "should be proper Mongoid field" do
 			@comment1.rating_marks.should be_an_instance_of Array

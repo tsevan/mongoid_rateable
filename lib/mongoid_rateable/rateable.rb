@@ -82,7 +82,7 @@ module Mongoid
 
       def rate_config options = {}, &block
         set_rating_range options[:range]
-        rateable_by options[:raters]
+        rateable_by *options[:raters]
         default_rater options[:default_rater], &block
       end
 
