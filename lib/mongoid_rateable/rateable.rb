@@ -7,7 +7,7 @@ module Mongoid
 
       module ClassMethods
         def rateable options = {}
-          class_eval do            
+          class_eval do
             self.send :include, Mongoid::Rateable
             puts "options: #{options}"
             self.rate_config options
@@ -49,7 +49,7 @@ module Mongoid
       def in_rating_range?(value)
         range = rating_range if respond_to?(:rating_range)
         range ? range.include?(value.to_i) : true
-      end      
+      end
 
       # macro to create dynamic :rating_range class method!
       # can now even take an Array and find the range of values!
@@ -98,7 +98,7 @@ module Mongoid
             self.instance_eval(&block)
           end
         else
-          raise ArgumentError, "Must take symbol or block argument" 
+          raise ArgumentError, "Must take symbol or block argument"
         end
       end
     end # class methods
@@ -107,12 +107,12 @@ module Mongoid
       case rater
       when Array
         rater.each{|rater| rate(mark, rater, weight)}
-      else 
+      else
         if !rater
           unless respond_to?(:default_rater)
             raise ArgumentError, "No rater argument and no default_rater specified"
           end
-          rater = default_rater 
+          rater = default_rater
         end
         validate_rater!(rater)
         validate_rating!(mark)
@@ -129,7 +129,7 @@ module Mongoid
       case rater
       when Array
         rater.each{|rater| unrate(mark, rater, weight)}
-      else 
+      else
         unrate_without_rating_update(rater)
         update_rating
       end
@@ -139,7 +139,7 @@ module Mongoid
       case rater
       when Array
         rater.each{|rater| rate_and_save(mark, rater, weight)}
-      else 
+      else
         rate(mark, rater, weight)
         save
       end
@@ -149,7 +149,7 @@ module Mongoid
       case rater
       when Array
         rater.each{|rater| unrate_and_save(mark, rater, weight)}
-      else 
+      else
         unrate(rater)
         save
       end
@@ -163,7 +163,7 @@ module Mongoid
       case rater
       when Array
         rater.each{|rater| rated_by(mark, rater, weight)}
-      else       
+      else
         self.rating_marks.where(:rater_id => rater.id, :rater_class => rater.class.to_s).count == 1
       end
     end
@@ -231,7 +231,7 @@ module Mongoid
       rt = (self.rates.to_f / self.weighted_rate_count.to_f) unless self.rating_marks.blank?
       write_attribute(:rating, rt)
       delta = (self.rating && self.previous_rating) ? rating-previous_rating : 0.0
-      write_attribute(:rating_delta, delta)      
+      write_attribute(:rating_delta, delta)
     end
 
     def check_weighted_rate_count
