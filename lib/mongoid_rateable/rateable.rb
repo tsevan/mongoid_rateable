@@ -17,6 +17,8 @@ module Mongoid
     end
 
     included do
+      include Mongoid::Attributes::Dynamic
+
       field :rates, type: Integer, default: 0
       field :rating, type: Float, default: nil
       field :rating_previous, type: Float, default: nil
@@ -27,8 +29,8 @@ module Mongoid
 
       index({"rating_marks.rater_id" => 1, "rating_marks.rater_class" => 1})
 
-      scope :unrated, where(:rating.exists => false)
-      scope :rated, where(:rating.exists => true)
+      scope :unrated, -> { where(:rating.exists => false) }
+      scope :rated, -> { where(:rating.exists => true) }
       scope :rated_by, ->(rater) { where("rating_marks.rater_id" => rater.id, "rating_marks.rater_class" => rater.class.to_s) }
       scope :with_rating, ->(range) { where(:rating.gte => range.begin, :rating.lte => range.end) }
       scope :highest_rated, ->(limit=10) { order_by([:rating, :desc]).limit(limit) }
